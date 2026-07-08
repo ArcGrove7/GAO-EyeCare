@@ -3,7 +3,7 @@
 // @namespace    gunart-eyecare
 // @version      1.0.0
 // @description  Low-saturation dark eye-care theme (WCAG AA) for Gun Art Online. Standalone — no classifier.
-// @author       ArcGrove
+// @author       ArcGrove7
 // @match        https://gunartonline.pages.dev/*
 // @run-at       document-start
 // @grant        none
