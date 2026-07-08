@@ -432,6 +432,11 @@
 
     const wrap = grid.closest('.grid-wrap') || grid.parentElement;
 
+    // Coexistence: if the UI Extension's list view (條列模式) is showing, pair its rows by index
+    // (same source order: direct filled cells) so the same filters hide/show them too.
+    const extList = wrap ? wrap.querySelector('.gao-ext-inventory-list') : null;
+    const extRows = extList ? Array.prototype.slice.call(extList.querySelectorAll('.gao-ext-inventory-row')) : [];
+
     const typesPresent = [], qualsPresent = [];
     const typeCount = {}, qualCount = {};
     let anyDur = false;
@@ -456,7 +461,7 @@
       else wrap.insertBefore(bar, grid);
       if (wrap) wrap.dataset.gaoClsSig = signature;
     }
-    applyEquipmentFilters(bar, rows, typeCount, qualCount);
+    applyEquipmentFilters(bar, rows, extRows, typeCount, qualCount);
   }
 
   function buildEquipmentBar(typesPresent, qualsPresent, anyDur) {
@@ -549,11 +554,12 @@
     return bar;
   }
 
-  function applyEquipmentFilters(bar, rows, typeCount, qualCount) {
+  function applyEquipmentFilters(bar, rows, extRows, typeCount, qualCount) {
     let shown = 0;
-    rows.forEach(function (r) {
+    rows.forEach(function (r, i) {
       const ok = rowMatches(r);
       r.el.classList.toggle('gao-cls-hidden-row', !ok);
+      if (extRows && extRows[i]) extRows[i].classList.toggle('gao-cls-hidden-row', !ok);
       if (ok) shown++;
     });
     if (!bar) return;
